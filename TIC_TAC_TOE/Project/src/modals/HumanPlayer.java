@@ -1,6 +1,7 @@
 package modals;
 
 import modals.TYPES.BotDifficulty;
+import modals.TYPES.CellStatus;
 import modals.TYPES.ExceptionTypes;
 import modals.TYPES.PlayerType;
 import utils.Validations.ValidationImpl;
@@ -25,6 +26,7 @@ public class HumanPlayer extends Player{
         if(validator.validCell(cells[row][col],board.getSize())) throw new RuntimeException(ExceptionTypes.INVALID_INPUT.toString());
         Move move = new Move(row,col,this);
         cells[row][col].setPlayer(this);
+        cells[row][col].setStatus(CellStatus.FILLED);
         return move;
     }
 }
