@@ -1,0 +1,105 @@
+class BaseEntity{
+    private long Id;
+    private Date createdId;
+    private Date lastUpdateAt;
+}
+class ParkingLot extends BaseEntity{
+    private String name;
+    private ParkingLotOperationalStatus status;
+    private List<ParkingFloor> floors;
+    private Set<Gate> entryGates;
+    private Set<Gate> exitGates;
+    private Set<Operators> operators;
+}
+class ParkingFloor extends BaseEntity{
+    private Set<ParkingSlot> slots;
+    private int floorNumber;
+    private OperationalStatus status
+}
+class ParkingSlot extends BaseEntity {
+    private String parkingLotNumber;
+    private ParkingSlotStatus status;
+    private ParkingSlotType type;
+    private Vehicle vehicle;
+    private Set<VehicleType> supportedVehicles;
+}
+class EVParkingSlot extends ParkingSlot{
+    private ChargingPoint station;
+}
+class ChargingPoint{
+    double currentUnits;
+}
+class Gate extends BaseEntity{
+    private gate_id
+    private GateType gateType;
+    private OperationalStatus status;
+}
+class Operator extends BaseEntity{
+     private String operatorName;
+     private String OperatorID;
+}
+class Vehicle extends BaseEntity{
+    private String vehicleRegNumber;
+    private VehicleType type;
+}
+class Bill extends BaseEntity{
+    private String billId;
+    private Ticket ticket;
+    private Date exitTime;
+    private List<Payment> payments;
+    private BillStatus status;
+    private List<PaymentDetails> payments;
+}
+class Ticket extends BaseEntity{
+    private String ticketId;
+    private Date entryTime;
+    private ParkingSlot slot;
+    private Vehicle vehicle;
+    private Operator operator;
+    private Gate gate;
+}
+interface PaymentGateway{}
+
+class PaymentDetails{
+    private String transactionId;
+    private String merchantId;
+    private double amount;
+    private PaymentStatus status
+}
+
+enum PaymentStatus{
+    SUCCESSFUL,
+    IN_PROGRESS,
+    FAILED,
+    REFUND
+ }
+enum GateType{
+       ENTRY,
+       EXIT
+}
+enum OperationalStatus{
+    OPERATIONAL,
+    UNDER_RENOVATION,
+    CLOSED
+}
+enum ParkingSlotStatus{
+    OCCUPIED,
+    EMPTY,
+    NOT_AVAILABLE
+}
+enum VehicleType{
+    BIKE,
+    CAR,
+    TRUCK,
+    BIKE_EV
+    CAR_EV
+}
+enum ParkingSlotType{
+    NORMAL,
+    EV_SUPPORTED
+  }
+
+user -> reaches to the entry gate -> operator at the gate prints the ticket which contains the parkingslot
+-> user goes to parkingslot parks the vehicle
+-> after user goes to the exit gate -> operator takes the ticket generates the bill
+-> user will go for the different payment options and make the payment and settles the ticket.
