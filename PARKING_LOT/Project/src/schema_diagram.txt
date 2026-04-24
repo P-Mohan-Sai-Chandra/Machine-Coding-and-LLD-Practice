@@ -1,0 +1,125 @@
+Tables:
+    1) ParkingLot
+        - parkinglot_id
+        - parkinglot_name
+        - parkinglot_address
+        - operational_status_id
+
+    2) ParkingFloor
+        - parkingfloor_id
+        - parkingfloor_number
+        - parkinglot_id
+
+    3) ParkingSlot
+        - parkingslot_id
+        - parkinglot_id
+        - parkingfloor_id
+        - vehicle_id
+        - vehcile_type_id
+
+    4) Vehicle
+        - vehicle_reg_number
+        - vehicle_model
+
+    5) Ticket
+        - ticket_id
+        - entry_time
+        - parkinglot_id
+        - vehicle_id
+        - parkingslot_id
+        - gate_id
+        - operator_id
+
+    6) Gate
+        - gate_id
+        - operator_id
+
+
+    7) Operator
+        - operator_id
+        - operator_name
+        - operator_email
+
+    8) EVParkingSpot
+        -ev_parking_slot_id
+        -parking_slot_type_id
+        -parkingslot_id
+        -units_entry_time
+        -units_exit_time
+
+    9)Charging Point
+            -ev_parking_slot_id
+            -currentUnits
+
+    10) Bill
+        - bill_id
+        - ticket_id
+        - exit_time
+
+    11) Payment
+        - transaction_id
+        - payment_status_id
+        - bill_id
+
+
+Lookup Tables:
+    1) OperationalStatus
+        - operational_status_id
+        - operations_status_name
+    2) ParkingSpotStatus
+        - parking_spot_status_id
+        - parking_spot_status_name
+    3) BillStatus
+        - bill_status_id
+        - bill_status_name
+    4) PaymentStatus
+        - payment_status_id
+        - payment_status_name
+    5) VehicleType
+        - vehicle_type_id
+        - vehicle_type_name
+    6) GateType
+        - gate_type_id
+        - gate_type_name
+
+
+Relations and Cardinality
+
+ParkingLot -> ParkingFloor (1 : M)
+ParkingLot -> ParkingSlots (1 : M)
+ParkingLot -> Gates ( 1 : M)
+ParkingLot -> Operators ( 1 : M)
+ParkingLot -> Payments (1 : M)
+ParkingLot -> Bills (1 : M)
+ParkingLot -> Tickets (1 : M)
+ParkingLot -> Vehicle (M : M) -> ParkingLots_Vehicles
+
+
+ParkingFloor -> ParkingSlots ( 1 : M )
+ParkingFloor -> Vehicle (1 : M)
+ParkingSlot -> Vehicle (1 : 1)
+
+Operator -> Gate (1 : 1) For Point of Time
+// For Tracking Based
+1 Operator can have M Gates
+1 Gate can have M Operators
+-> Operators_Gates_Log_History
+
+Operator -> Ticket (1 : M)
+
+Gate -> Ticket (1 : M)
+
+Vehicle -> Ticket (1 : 1)
+
+Bill -> Payments (1 : M)
+
+EVparkingSpot -> ChargingStation (1 : 1)
+
+
+// If i want to log all the vehcile for a particular spot for a day
+1 parkingspot -> M vehicles
+1 vehcile -> M spots
+
+vehicle_spot_logs
+parkingspot_id, vehicle_id,entry_time,exit_time
+
