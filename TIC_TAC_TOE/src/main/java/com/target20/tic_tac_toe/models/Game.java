@@ -4,6 +4,7 @@ import com.target20.tic_tac_toe.strategy.WinningStrategy;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -62,6 +63,32 @@ public class Game {
                 break;
             }
         }
+    }
+
+    public void initialzeBoard(int boardSize){
+        Board board = new Board();
+        this.board = board;
+        this.board.setSize(boardSize);
+        List<List<Cell>> cells = new ArrayList<>();
+        for(int row = 0;row < boardSize;row++){
+            List<Cell> cell_row = new ArrayList<>();
+            for(int col = 0;col < boardSize;col++){
+                Cell cell = new Cell();
+                cell.setRow(row);
+                cell.setCol(col);
+                cell.setCellStatus(CellStatus.EMPTY);
+                cell_row.add(cell);
+            }
+            cells.add(cell_row);
+        }
+        this.board.setCells(cells);
+    }
+    public void initializeWinningStrategies(int boardSize){
+        if(strategies != null) return;
+        strategies = new WinningStrategy[]{WinningStrategy.getStrategy(WinnerStrategy.ROW, boardSize),
+        WinningStrategy.getStrategy(WinnerStrategy.COL, boardSize),
+        WinningStrategy.getStrategy(WinnerStrategy.LEFT_DIAG, boardSize),
+        WinningStrategy.getStrategy(WinnerStrategy.RIGHT_DIAG, boardSize)};
     }
 
     public void checkForTie(){

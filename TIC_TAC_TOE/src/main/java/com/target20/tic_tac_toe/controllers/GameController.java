@@ -10,52 +10,35 @@ import java.util.Scanner;
 
 public class GameController {
 
-    private Game game;
-    private Board board;
     private Scanner input;
     public GameController(){
-        this.game = new Game();
-        this.board = new Board();
         input = new Scanner(System.in);
     }
 
 
     public void startGame(List<Player> players,int boardSize){
+        /*
+        1) Create a new game object
+        2) intialize the board
+        3) set the players
+        4) intialize the winning strategies
+        */
+        Game game = new Game();
         game.setPlayers(players);
-        WinningStrategy[] winningStrategies = {WinningStrategy.getStrategy(WinnerStrategy.ROW,boardSize),
-        WinningStrategy.getStrategy(WinnerStrategy.COL,boardSize),
-        WinningStrategy.getStrategy(WinnerStrategy.LEFT_DIAG,boardSize),
-        WinningStrategy.getStrategy(WinnerStrategy.RIGHT_DIAG,boardSize)};
-        game.setStrategies(winningStrategies);
-        List<List<Cell>> cells = new ArrayList<>();
-        for(int row = 0;row < boardSize;row++){
-            List<Cell> cell_row = new ArrayList<>();
-            for(int col = 0;col < boardSize;col++){
-                Cell cell = new Cell();
-                cell.setRow(row);
-                cell.setCol(col);
-                cell.setCellStatus(CellStatus.EMPTY);
-                cell_row.add(cell);
-            }
-            cells.add(cell_row);
-        }
-        board.setCells(cells);
-        board.setSize(boardSize);
-        game.setStatus(GameStatus.STARTED);
-        game.setBoard(board);
+        game.initialzeBoard(boardSize);
+        game.initializeWinningStrategies(boardSize);
+        game.setStatus((GameStatus.STARTED));
         while(game.getStatus() == GameStatus.STARTED){
-            Player player = game.nextPlayer();
-            System.out.println("Enter the row and col  for the player " + player.getPlayerName());
-            int row = input.nextInt();
-            int col = input.nextInt();
-            makeMove(row,col,player);
+            makeMove(game);
         }
         if(game.getStatus() == GameStatus.COMPLETED){
-            System.out.println("The Winner is " + game.getWinner());
+            Player winner = game.getWinner();
+            System.out.println("The winner is " + winner.getPlayerName() + " " + winner.getPlayerSymbol().getSymbolImage());
         }
-        else if(game.getStatus() == GameStatus.TIE){
-            System.out.println("Game is Tie");
+        if(game.getStatus() == GameStatus.TIE){
+            System.out.println("It is a TIE");
         }
+
     }
     public void quitGame(){
 
@@ -66,7 +49,13 @@ public class GameController {
     public void getWinner(){
 
     }
-    public void makeMove(int row,int col,Player player){
+    public void makeMove(Game game){
+        Player player = game.nextPlayer();
+        System.out.println("It is " + player.getPlayerName() + "'s turn");
+        System.out.println("Enter the row value");
+        int row = input.nextInt();
+        System.out.println("Enter the col value");
+        int col = input.nextInt();
         game.makeMove(row,col,player);
     }
 
